@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+
+const mods = import.meta.glob('../../content/pages/gallery.md', { eager: true });
+const page = Object.values(mods)[0];
+const { Content, frontmatter } = page;
+
+const empty = !page.rawContent().replace(/^---[\s\S]*?---/, '').trim();
+---
+<Base title={frontmatter.title} description={frontmatter.description}>
+  <div class="alignwide">
+    <h1 class="page-title">{frontmatter.title}</h1>
+  </div>
+  {!empty && (
+    <div class="constrained page-body">
+      <Content />
+    </div>
+  )}
+</Base>

@@ -1,0 +1,32 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const mods = import.meta.glob('../../../content/events/*.md', { eager: true });
+const events = Object.values(mods)
+  .map(m => ({ ...m.frontmatter, Content: m.Content }))
+  .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+
+const fmt = d => {
+  const [y, m, day] = String(d).split('-').map(Number);
+  if (!y || !m || !day) return d;
+  return new Date(Date.UTC(y, m - 1, day)).toLocaleDateString('en-US', {
+    year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
+  });
+};
+---
+<Base title="Events" description="Upcoming and past SASE Purdue events.">
+  <div class="alignwide">
+    <h1 class="page-title">Events</h1>
+  </div>
+  <div class="constrained page-body">
+    {events.length === 0
+      ? <p class="note">Check back soon for upcoming events.</p>
+      : events.map(e => (
+          <article class="event">
+            <h2>{e.title}</h2>
+            <p><em>{fmt(e.date)}</em></p>
+            <e.Content />
+          </article>
+        ))}
+  </div>
+</Base>

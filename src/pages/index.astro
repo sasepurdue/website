@@ -1,17 +1,19 @@
 ---
+import Base from '../layouts/Base.astro';
 
+const mods = import.meta.glob('../../content/home.md', { eager: true });
+const { Content, frontmatter } = Object.values(mods)[0];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
+<Base title={undefined} description={frontmatter.description}>
+  <h1 class="visually-hidden">SASE Purdue</h1>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+  <figure class="home-photo">
+    <img src={`${base}/images/board-group.jpg`} alt="The SASE Purdue board"
+         width="1024" height="683" />
+  </figure>
+
+  <div class="constrained home-body">
+    <Content />
+  </div>
+</Base>

@@ -1,0 +1,81 @@
+---
+import '../styles/global.css';
+
+const { title, description } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const nav = [
+  { href: '/events/', label: 'Events' },
+  { href: '/our-team/', label: 'Our Team' },
+  { label: 'About SASE', children: [
+    { href: '/students/', label: 'For Students' },
+    { href: '/sponsors/', label: 'For Sponsors' },
+  ]},
+  { href: '/gallery/', label: 'Gallery' },
+];
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    <title>{title ? `${title} — SASE Purdue` : 'SASE Purdue — Society of Asian Scientists and Engineers – Purdue'}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="alignwide bar">
+        <a class="site-logo" href={`${base}/`}>
+          <img src={`${base}/images/logo.png`} alt="SASE Purdue logo" width="60" />
+        </a>
+        <p class="site-title"><a href={`${base}/`}>SASE Purdue</a></p>
+        <nav class="site-nav" aria-label="Main">
+          <ul>
+            {nav.map(item => item.children ? (
+              <li class="has-child">
+                <a href={`${base}${item.children[0].href}`}>{item.label}</a>
+                <ul class="submenu">
+                  {item.children.map(c => <li><a href={`${base}${c.href}`}>{c.label}</a></li>)}
+                </ul>
+              </li>
+            ) : (
+              <li><a href={`${base}${item.href}`}>{item.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="site-footer">
+      <div class="alignwide">
+        <hr class="separator" />
+        <div class="footer-row">
+          <a class="site-logo" href={`${base}/`}>
+            <img src={`${base}/images/logo.png`} alt="" width="60" />
+          </a>
+          <div class="footer-identity">
+            <h2 class="site-title"><a href={`${base}/`}>SASE Purdue</a></h2>
+            <p class="tagline">Society of Asian Scientists and Engineers – Purdue</p>
+          </div>
+          <div class="footer-end">
+            <p>Purdue University student organizations are open to all students,
+            in accordance with the University's Non-Discrimination Policy Statement.</p>
+            <nav class="footer-nav" aria-label="Footer">
+              <ul>
+                <li><a href={`${base}/events/`}>Events</a></li>
+                <li><a href={`${base}/our-team/`}>Our Team</a></li>
+                <li><a href="mailto:purdue@saseconnect.org">Contact Us</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
